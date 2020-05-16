@@ -1,6 +1,5 @@
 package com.github.cc3002.citricjuice.model;
 
-import java.util.Random;
 
 /**
  * This class represents a player in the game 99.7% Citric Liquid.
@@ -11,15 +10,9 @@ import java.util.Random;
  * @since 1.0
  */
 public class Player {
-  private final Random random;
-  private final String name;
-  private final int maxHP;
-  private final int atk;
-  private final int def;
-  private final int evd;
+  private Character character;
   private int normaLevel;
   private int stars;
-  private int currentHP;
 
   /**
    * Creates a new character.
@@ -37,13 +30,9 @@ public class Player {
    */
   public Player(final String name, final int hp, final int atk, final int def,
                 final int evd) {
-    this.name = name;
-    this.maxHP = currentHP = hp;
-    this.atk = atk;
-    this.def = def;
-    this.evd = evd;
+    character = new Character(name,hp,atk,def, evd);
     normaLevel = 1;
-    random = new Random();
+    //IMPLICITO: stars = 0;
   }
 
   /**
@@ -67,49 +56,49 @@ public class Player {
    * declared to avoid non-deterministic behaviour while testing the code.
    */
   public void setSeed(final long seed) {
-    random.setSeed(seed);
+    character.setSeed(seed);
   }
 
   /**
    * Returns a uniformly distributed random value in [1, 6]
    */
   public int roll() {
-    return random.nextInt(6) + 1;
+    return character.roll();
   }
 
   /**
    * Returns the character's name.
    */
   public String getName() {
-    return name;
+    return character.getName();
   }
 
   /**
    * Returns the character's max hit points.
    */
   public int getMaxHP() {
-    return maxHP;
+    return character.getMaxHP();
   }
 
   /**
    * Returns the current character's attack points.
    */
   public int getAtk() {
-    return atk;
+    return character.getAtk();
   }
 
   /**
    * Returns the current character's defense points.
    */
   public int getDef() {
-    return def;
+    return character.getDef();
   }
 
   /**
    * Returns the current character's evasion points.
    */
   public int getEvd() {
-    return evd;
+    return character.getEvd();
   }
 
   /**
@@ -130,17 +119,10 @@ public class Player {
    * Returns the current hit points of the character.
    */
   public int getCurrentHP() {
-    return currentHP;
+    return character.getCurrentHP();
   }
 
-  /**
-   * Sets the current character's hit points.
-   * <p>
-   * The character's hit points have a constraint to always be between 0 and maxHP, both inclusive.
-   */
-  public void setCurrentHP(final int newHP) {
-    this.currentHP = Math.max(Math.min(newHP, maxHP), 0);
-  }
+
 
   /**
    * Reduces this player's star count by a given amount.
@@ -174,6 +156,6 @@ public class Player {
    * Returns a copy of this character.
    */
   public Player copy() {
-    return new Player(name, maxHP, atk, def, evd);
+    return new Player(this.getName(), this.getMaxHP(), this.getAtk(), this.getDef(), this.getEvd());
   }
 }
