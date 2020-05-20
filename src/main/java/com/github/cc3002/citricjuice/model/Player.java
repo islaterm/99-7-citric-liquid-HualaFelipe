@@ -1,6 +1,8 @@
 package com.github.cc3002.citricjuice.model;
 
 
+import java.util.Objects;
+
 /**
  * This class represents a player in the game 99.7% Citric Liquid.
  *
@@ -9,10 +11,9 @@ package com.github.cc3002.citricjuice.model;
  * @version 1.0.6-rc.3
  * @since 1.0
  */
-public class Player {
-  private Character character;
+public class Player extends Character{
   private int normaLevel;
-  private int stars;
+
 
   /**
    * Creates a new character.
@@ -28,77 +29,9 @@ public class Player {
    * @param evd
    *     the base evasion of the character.
    */
-  public Player(final String name, final int hp, final int atk, final int def,
-                final int evd) {
-    character = new Character(name,hp,atk,def, evd);
+  public Player(final String name, final int hp, final int atk, final int def, final int evd){
+    super(name,hp,atk,def, evd);
     normaLevel = 1;
-    //IMPLICITO: stars = 0;
-  }
-
-  /**
-   * Increases this player's star count by an amount.
-   */
-  public void increaseStarsBy(final int amount) {
-    stars += amount;
-  }
-
-  /**
-   * Returns this player's star count.
-   */
-  public int getStars() {
-    return stars;
-  }
-
-  /**
-   * Set's the seed for this player's random number generator.
-   * <p>
-   * The random number generator is used for taking non-deterministic decisions, this method is
-   * declared to avoid non-deterministic behaviour while testing the code.
-   */
-  public void setSeed(final long seed) {
-    character.setSeed(seed);
-  }
-
-  /**
-   * Returns a uniformly distributed random value in [1, 6]
-   */
-  public int roll() {
-    return character.roll();
-  }
-
-  /**
-   * Returns the character's name.
-   */
-  public String getName() {
-    return character.getName();
-  }
-
-  /**
-   * Returns the character's max hit points.
-   */
-  public int getMaxHP() {
-    return character.getMaxHP();
-  }
-
-  /**
-   * Returns the current character's attack points.
-   */
-  public int getAtk() {
-    return character.getAtk();
-  }
-
-  /**
-   * Returns the current character's defense points.
-   */
-  public int getDef() {
-    return character.getDef();
-  }
-
-  /**
-   * Returns the current character's evasion points.
-   */
-  public int getEvd() {
-    return character.getEvd();
   }
 
   /**
@@ -115,41 +48,20 @@ public class Player {
     normaLevel++;
   }
 
-  /**
-   * Returns the current hit points of the character.
-   */
-  public int getCurrentHP() {
-    return character.getCurrentHP();
-  }
 
-
-
-  /**
-   * Reduces this player's star count by a given amount.
-   * <p>
-   * The star count will must always be greater or equal to 0
-   */
-  public void reduceStarsBy(final int amount) {
-    stars = Math.max(0, stars - amount);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Player)) return false;
+    if (!super.equals(o)) return false;
+    Player player = (Player) o;
+    return getNormaLevel() == player.getNormaLevel() &&
+            getStars() == player.getStars();
   }
 
   @Override
-  public boolean equals(final Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Player)) {
-      return false;
-    }
-    final Player player = (Player) o;
-    return getMaxHP() == player.getMaxHP() &&
-           getAtk() == player.getAtk() &&
-           getDef() == player.getDef() &&
-           getEvd() == player.getEvd() &&
-           getNormaLevel() == player.getNormaLevel() &&
-           getStars() == player.getStars() &&
-           getCurrentHP() == player.getCurrentHP() &&
-           getName().equals(player.getName());
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), getNormaLevel(), getStars());
   }
 
   /**

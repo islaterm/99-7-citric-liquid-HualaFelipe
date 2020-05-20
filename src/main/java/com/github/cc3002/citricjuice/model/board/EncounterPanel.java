@@ -1,8 +1,8 @@
 package com.github.cc3002.citricjuice.model.board;
 import com.github.cc3002.citricjuice.model.Player;
 
-public class NeutralPanel extends AbstractPanel{
-    public NeutralPanel(){
+public class EncounterPanel extends AbstractPanel{
+    public EncounterPanel(){
         super();
     }
 
@@ -13,7 +13,7 @@ public class NeutralPanel extends AbstractPanel{
      */
 
     public void activatedBy(final Player player) {
-
+        //Battle with a Wild Unit
     }
 
 }

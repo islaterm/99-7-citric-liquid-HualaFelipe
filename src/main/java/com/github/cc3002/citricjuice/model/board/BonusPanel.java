@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BonusPanel extends AbstractPanel{
     public BonusPanel(){
-        super(PanelType.BONUS);
+        super();
     }
 
 

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DropPanel extends AbstractPanel{
     public DropPanel(){
-        super(PanelType.DROP);
+        super();
     }
 
     /**

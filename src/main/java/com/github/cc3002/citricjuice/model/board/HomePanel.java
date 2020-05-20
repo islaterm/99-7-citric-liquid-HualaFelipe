@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class HomePanel extends AbstractPanel{
     public HomePanel(){
-        super(PanelType.HOME);
+        super();
     }
 
     /**
