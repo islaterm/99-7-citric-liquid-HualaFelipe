@@ -1,10 +1,10 @@
 package com.github.cc3002.citricjuice.model.board;
-import com.github.cc3002.citricjuice.model.Player;
+import com.github.cc3002.citricjuice.model.unit.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class HomePanel extends AbstractPanel{
-    public HomePanel(){
-        super();
+    public HomePanel(int id){
+        super(id);
     }
 
     /**
@@ -22,6 +22,7 @@ public class HomePanel extends AbstractPanel{
 
     public void activatedBy(final Player player) {
         applyHealTo(player);
+        player.normaCheck();
 
     }
 }

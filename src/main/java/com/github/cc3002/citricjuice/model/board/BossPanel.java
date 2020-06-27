@@ -1,9 +1,9 @@
 package com.github.cc3002.citricjuice.model.board;
-import com.github.cc3002.citricjuice.model.Player;
+import com.github.cc3002.citricjuice.model.unit.Player;
 
 public class BossPanel extends AbstractPanel{
-    public BossPanel(){
-        super();
+    public BossPanel(int id){
+        super(id);
     }
 
     /**

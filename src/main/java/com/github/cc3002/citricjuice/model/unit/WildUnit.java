@@ -1,4 +1,4 @@
-package com.github.cc3002.citricjuice.model;
+package com.github.cc3002.citricjuice.model.unit;
 
 public class WildUnit extends AbstractNonPlayerUnit{
 
@@ -6,8 +6,11 @@ public class WildUnit extends AbstractNonPlayerUnit{
         super(name, hp,atk,def,evd);
     }
 
+
+
     @Override
     public void attackDefend(Unit defender) {
+
         defender.defendWildUnitAttack(this);
     }
 
@@ -16,13 +19,16 @@ public class WildUnit extends AbstractNonPlayerUnit{
         defender.evadeWildUnitAttack(this);
     }
 
+
+
     @Override
-    public void koCharacterAttack(Character attacker) {
+    public void koPlayerAttack(Player attacker) {
         if(this.getCurrentHP()==0) {
             int stars = this.getStars();
             attacker.increaseStarsBy(stars);
             this.reduceStarsBy(stars);
             attacker.increaseVictoriesBy(1);
+            this.goDead();
         }
     }
 
@@ -33,6 +39,7 @@ public class WildUnit extends AbstractNonPlayerUnit{
             attacker.increaseStarsBy(stars);
             this.reduceStarsBy(stars);
             attacker.increaseVictoriesBy(1);
+            this.goDead();
         }
     }
 
@@ -43,6 +50,7 @@ public class WildUnit extends AbstractNonPlayerUnit{
             attacker.increaseStarsBy(stars);
             this.reduceStarsBy(stars);
             attacker.increaseVictoriesBy(1);
+            this.goDead();
         }
     }
 }

@@ -1,4 +1,6 @@
-package com.github.cc3002.citricjuice.model;
+package com.github.cc3002.citricjuice.model.unit;
+
+import com.github.cc3002.citricjuice.model.unit.lifestate.ILifeState;
 
 public interface Unit {
     void setSeed(final long seed);
@@ -10,14 +12,12 @@ public interface Unit {
     int getEvd();
     int getCurrentHP();
     void setCurrentHP(final int newHP);
-    //Attack functions
-    void attackDefend(final Unit defender);
-    void attackEvade(final Unit defender);
+
 
     //Defend and evade functions in response to the different types of attackers
-    //Character (Player)
-    void defendCharacterAttack(final Character attacker);
-    void evadeCharacterAttack(final Character attacker);
+    //Player (Player)
+    void defendPlayerAttack(final Player attacker);
+    void evadePlayerAttack(final Player attacker);
     //Wild Unit
     void defendWildUnitAttack(final WildUnit attacker);
     void evadeWildUnitAttack(final WildUnit attacker);
@@ -25,9 +25,12 @@ public interface Unit {
     void defendBossUnitAttack(final BossUnit attacker);
     void evadeBossUnitAttack(final BossUnit attacker);
 
-    //Functions in response to a posible K.O. in a combat of the different types of attackers
-    void koCharacterAttack(final Character attacker);
-    void koBossUnitAttack(final BossUnit attacker);
-    void koWildUnitAttack(final WildUnit attacker);
+    boolean isAlive();
+    void goDead();
+
+    void attack(Unit receiver, TypeCombat typeCombat);
+
+    void setLifeState(ILifeState lifeState);
+
 
 }

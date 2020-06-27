@@ -1,6 +1,6 @@
 package com.github.cc3002.citricjuice.model.board;
 
-import com.github.cc3002.citricjuice.model.Player;
+import com.github.cc3002.citricjuice.model.unit.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,26 +35,25 @@ class PanelTest {
 
   @BeforeEach
   public void setUp() {
-    testBonusPanel = new BonusPanel();
-    testBossPanel = new BossPanel();
-    testDropPanel = new DropPanel();
-    testEncounterPanel = new EncounterPanel();
-    testHomePanel = new HomePanel();
-    testNeutralPanel = new NeutralPanel();
-    testDrawPanel = new DrawPanel();
+    testBonusPanel = new BonusPanel(1);
+    testBossPanel = new BossPanel(2);
+    testDropPanel = new DropPanel(3);
+    testEncounterPanel = new EncounterPanel(4);
+    testHomePanel = new HomePanel(5);
+    testDrawPanel = new DrawPanel(7);
     testSeed = new Random().nextLong();
     suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
   }
 
   @Test
   public void constructorTest() {
-    assertEquals(new BonusPanel(), testBonusPanel);
-    assertEquals(new BossPanel(), testBossPanel);
-    assertEquals(new DropPanel(), testDropPanel);
-    assertEquals(new EncounterPanel(), testEncounterPanel);
-    assertEquals(new DrawPanel(), testDrawPanel);
-    assertEquals(new HomePanel(), testHomePanel);
-    assertEquals(new NeutralPanel(), testNeutralPanel);
+    assertEquals(new BonusPanel(8), testBonusPanel);
+    assertEquals(new BossPanel(9), testBossPanel);
+    assertEquals(new DropPanel(10), testDropPanel);
+    assertEquals(new EncounterPanel(11), testEncounterPanel);
+    assertEquals(new DrawPanel(12), testDrawPanel);
+    assertEquals(new HomePanel(13), testHomePanel);
+    assertEquals(new NeutralPanel(14), testNeutralPanel);
     assertNotEquals(testBonusPanel, testDropPanel);
     assertNotEquals(testHomePanel, testDropPanel);
   }
@@ -63,9 +61,9 @@ class PanelTest {
   @Test
   public void nextPanelTest() {
     assertTrue(testNeutralPanel.getNextPanels().isEmpty());
-    final var expectedPanel1 = new NeutralPanel();
-    final var expectedPanel2 = new NeutralPanel();
-    final var expectedPanel3 = new NeutralPanel();
+    final var expectedPanel1 = new NeutralPanel(15);
+    final var expectedPanel2 = new NeutralPanel(16);
+    final var expectedPanel3 = new NeutralPanel(17);
 
     testNeutralPanel.addNextPanel(expectedPanel1);
     assertEquals( testNeutralPanel.getNextPanels().size(),1);

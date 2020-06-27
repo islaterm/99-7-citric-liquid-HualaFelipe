@@ -1,8 +1,10 @@
 package com.github.cc3002.citricjuice.model;
 
+import com.github.cc3002.citricjuice.model.unit.BossUnit;
+import com.github.cc3002.citricjuice.model.unit.Player;
+import com.github.cc3002.citricjuice.model.unit.WildUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -84,7 +86,7 @@ public class CombatTest {
 
 
         suguri.attackDefend(chicken);
-        assertTrue(chicken.getCurrentHP() >=0 && chicken.getCurrentHP() <=2,"Se escapó el Hp de lee");
+        assertTrue(chicken.getCurrentHP() >=0 && chicken.getCurrentHP() <=2,"Se escapó el Hp de chiken");
         assertTrue(suguri.getStars()==10 ||suguri.getStars()==15 || suguri.getStars()==20 || suguri.getStars() ==25,"Se escaparaon las estrellas de suguri");
         assertTrue(suguri.getVictories()>=0 && suguri.getVictories()<=3 , "Se escaparon las Victories de Suguri");
 

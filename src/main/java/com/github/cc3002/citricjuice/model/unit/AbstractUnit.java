@@ -1,4 +1,8 @@
-package com.github.cc3002.citricjuice.model;
+package com.github.cc3002.citricjuice.model.unit;
+
+import com.github.cc3002.citricjuice.model.unit.lifestate.Alive;
+import com.github.cc3002.citricjuice.model.unit.lifestate.Dead;
+import com.github.cc3002.citricjuice.model.unit.lifestate.ILifeState;
 
 import java.util.Objects;
 import java.util.Random;
@@ -7,13 +11,14 @@ public abstract class AbstractUnit implements Unit {
     private final Random random;
     private final String name;
     private final int maxHP;
-    private int atk;
-    private int def;
-    private int evd;
+    protected int atk;
+    protected int def;
+    protected int evd;
     private int currentHP;
     private int stars;
     private int victories;
     private int rollAtk;
+    private ILifeState lifeState;
 
     public AbstractUnit(final String name, final int hp, int atk, int def, int evd){
         this.name = name;
@@ -22,7 +27,16 @@ public abstract class AbstractUnit implements Unit {
         this.def=def;
         this.evd = evd;
         random = new Random();
+        lifeState = (ILifeState) new Alive(this);
         //IMPLICITO: stars = 0;
+    }
+
+    public void setLifeState(ILifeState lifeState) {
+        this.lifeState = lifeState;
+    }
+
+    public ILifeState getLifeState() {
+        return lifeState;
     }
 
     /**
@@ -55,52 +69,41 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
-     * Returns the character's name.
+     * Returns the Player's name.
      */
     public String getName() {
         return name;
     }
     /**
-     * Returns the character's max hit points.
+     * Returns the Player's max hit points.
      */
     public int getMaxHP() {
         return maxHP;
     }
 
     /**
-     * Returns the character's attack points.
+     * Returns the Player's attack points.
      */
     public int getAtk() {
         return atk;
     }
     /**
-     * Returns the character's defense points.
+     * Returns the Player's defense points.
      */
     public int getDef() {
         return def;
     }
     /**
-     * Returns the character's evasion points.
+     * Returns the Player's evasion points.
      */
 
     public int getEvd() {
         return evd;
     }
 
-    public void setAtk(int atk) {
-        this.atk = atk;
-    }
-
-    public void setDef(int def) {
-        this.def = def;
-    }
-
-    public void setEvd(int evd) {
-        this.evd = evd;
-    }
 
     /**
-     * Returns the current hit points of the character.
+     * Returns the current hit points of the Player.
      */
     public int getCurrentHP() {
         return currentHP;
@@ -108,9 +111,9 @@ public abstract class AbstractUnit implements Unit {
 
 
     /**
-     * Sets the current character's hit points.
+     * Sets the current Player's hit points.
      * <p>
-     * The character's hit points have a constraint to always be between 0 and maxHP, both inclusive.
+     * The Player's hit points have a constraint to always be between 0 and maxHP, both inclusive.
      */
     public void setCurrentHP(final int newHP) {
         this.currentHP = Math.max(Math.min(newHP, maxHP), 0);
@@ -171,43 +174,73 @@ public abstract class AbstractUnit implements Unit {
         this.setCurrentHP(getCurrentHP()-damage);
     }
 
-    @Override
-    public void defendCharacterAttack(final Character attacker){
-        defend(attacker);
-        koCharacterAttack(attacker);
+    public void attack(Unit receiver, TypeCombat typeCombat){
+        if(receiver.isAlive() && this.isAlive()) {
+            if (typeCombat == TypeCombat.DEFEND) {
+                this.attackDefend(receiver);
+            } else if (typeCombat == TypeCombat.EVADE) {
+                this.attackEvade(receiver);
+            }
+        }
     }
 
-    @Override
-    public void evadeCharacterAttack(final Character attacker){
-        evade(attacker);
-        koCharacterAttack(attacker);
+    public boolean isAlive() {
+        return lifeState.isAlive();
     }
 
-    @Override
+
+    //Attack functions
+    abstract void attackDefend(final Unit defender);
+    abstract void attackEvade(final Unit defender);
+
+    //Functions in response to a possible K.O. in a combat of the different types of attackers
+    abstract void koPlayerAttack(final Player attacker);
+    abstract void koBossUnitAttack(final BossUnit attacker);
+    abstract void koWildUnitAttack(final WildUnit attacker);
+
+
+    public void defendPlayerAttack(final Player attacker){
+        if(attacker.isAlive() && this.isAlive()) {
+            defend(attacker);
+            koPlayerAttack(attacker);
+        }
+    }
+
+    public void evadePlayerAttack(final Player attacker){
+        if(attacker.isAlive() && this.isAlive()) {
+            evade(attacker);
+            koPlayerAttack(attacker);
+        }
+    }
+
     public void defendWildUnitAttack(WildUnit attacker) {
-        defend(attacker);
-        koWildUnitAttack(attacker);
+        if(attacker.isAlive() && this.isAlive()) {
+            defend(attacker);
+            koWildUnitAttack(attacker);
+        }
     }
 
-    @Override
     public void evadeWildUnitAttack(WildUnit attacker) {
-        evade(attacker);
-        koWildUnitAttack(attacker);
+        if(attacker.isAlive() && this.isAlive()) {
+            evade(attacker);
+            koWildUnitAttack(attacker);
+        }
     }
 
-    @Override
     public void defendBossUnitAttack(BossUnit attacker) {
-        defend(attacker);
-        koBossUnitAttack(attacker);
+        if(attacker.isAlive() && this.isAlive()) {
+            defend(attacker);
+            koBossUnitAttack(attacker);
+        }
     }
 
-    @Override
     public void evadeBossUnitAttack(BossUnit attacker) {
-        evade(attacker);
-        koBossUnitAttack(attacker);
+        if(attacker.isAlive() && this.isAlive()) {
+            evade(attacker);
+            koBossUnitAttack(attacker);
+        }
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AbstractUnit)) return false;
@@ -219,6 +252,10 @@ public abstract class AbstractUnit implements Unit {
                 getCurrentHP() == that.getCurrentHP() &&
                 getStars() == that.getStars() &&
                 Objects.equals(getName(), that.getName());
+    }
+
+    public void goDead(){
+        this.setLifeState(new Dead(this));
     }
 
 }

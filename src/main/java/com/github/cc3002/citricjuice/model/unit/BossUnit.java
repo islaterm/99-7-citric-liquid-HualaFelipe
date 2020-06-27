@@ -1,4 +1,4 @@
-package com.github.cc3002.citricjuice.model;
+package com.github.cc3002.citricjuice.model.unit;
 
 public class BossUnit extends AbstractNonPlayerUnit {
 
@@ -17,12 +17,13 @@ public class BossUnit extends AbstractNonPlayerUnit {
     }
 
     @Override
-    public void koCharacterAttack(Character attacker) {
+    public void koPlayerAttack(Player attacker) {
         if(this.getCurrentHP()==0) {
             int stars = this.getStars();
             attacker.increaseStarsBy(stars);
             this.reduceStarsBy(stars);
             attacker.increaseVictoriesBy(3);
+            this.goDead();
         }
     }
 
@@ -33,6 +34,7 @@ public class BossUnit extends AbstractNonPlayerUnit {
             attacker.increaseStarsBy(stars);
             this.reduceStarsBy(stars);
             attacker.increaseVictoriesBy(3);
+            this.goDead();
         }
     }
 
@@ -43,6 +45,7 @@ public class BossUnit extends AbstractNonPlayerUnit {
             attacker.increaseStarsBy(stars);
             this.reduceStarsBy(stars);
             attacker.increaseVictoriesBy(3);
+            this.goDead();
         }
     }
 }

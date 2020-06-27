@@ -1,5 +1,8 @@
 package com.github.cc3002.citricjuice.model.board;
 
+import com.github.cc3002.citricjuice.model.unit.Player;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Objects;
@@ -14,6 +17,9 @@ import java.util.Objects;
 
 public abstract class AbstractPanel implements Panel {
   private final LinkedList<Panel> nextPanels;
+  private ArrayList<Player> players;
+  private int id;
+
 
   /**
    * Creates a new panel.
@@ -21,12 +27,36 @@ public abstract class AbstractPanel implements Panel {
    * @param
    *
    */
-  public AbstractPanel() {
+  public AbstractPanel(int id) {
+      this.id=id;
       this.nextPanels = new LinkedList<Panel>();
   }
 
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
 
-  /**
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public Player addPlayer(Player player){
+      players.add(player);
+      player.setPanel(this);
+      return player;
+    }
+
+    public Player removePlayer(Player player){
+      players.remove(player);
+      player.setPanel(null);
+      return player;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    /**
    * Returns a copy of this panel's next ones.
    * @return
    */
