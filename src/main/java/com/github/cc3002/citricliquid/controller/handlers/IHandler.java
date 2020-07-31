@@ -4,5 +4,4 @@ import java.beans.PropertyChangeListener;
 
 public interface IHandler extends PropertyChangeListener {
 
-
 }

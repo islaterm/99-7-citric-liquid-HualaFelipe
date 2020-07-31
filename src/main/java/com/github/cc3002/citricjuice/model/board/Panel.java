@@ -15,4 +15,11 @@ public interface Panel{
 
     int getId();
 
+    void setHome(Player player);
+
+    boolean isEncounterPanel();
+    boolean isBossPanel();
+
+    String getImageUrl();
+
 }

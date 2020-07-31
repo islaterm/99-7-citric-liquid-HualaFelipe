@@ -73,6 +73,15 @@ public class CombatTest {
         shifuRobot.rollAtk();
         flyingCastle.rollAtk();
 
+        suguri.rollDef();
+        lee.rollDef();
+        chicken.rollDef();
+        roboBall.rollDef();
+        seagull.rollDef();
+        storeManager.rollDef();
+        shifuRobot.rollDef();
+        flyingCastle.rollDef();
+
         assertTrue(suguri.getRollAtk()<=6 && suguri.getRollAtk()>0,suguri.getRollAtk()+" está afuera del rango");
 
 
@@ -91,21 +100,11 @@ public class CombatTest {
         assertTrue(suguri.getVictories()>=0 && suguri.getVictories()<=3 , "Se escaparon las Victories de Suguri");
 
         lee.attackDefend(storeManager);
-        assertTrue(storeManager.getCurrentHP()>=3 && storeManager.getCurrentHP()<=7,"se escapo el Hp de store manager");
+        assertTrue(storeManager.getCurrentHP()>=3 && storeManager.getCurrentHP()<=8,"se escapo el Hp de store manager"+storeManager.getCurrentHP());
         assertTrue(lee.getStars()==5 || lee.getStars()==10,"Se escaparaon las estrellas de lee");
         assertTrue(lee.getVictories()==0, "Se escaparon las Victories de Lee");
 
 
-        /*
-        seagull.attackDefend(lee);
-        roboBall.attackDefend(seagull);
-        chicken.attackDefend(shifuRobot);
-
-        flyingCastle.attackDefend(suguri);
-        storeManager.attackDefend(seagull);
-        shifuRobot.attackDefend(flyingCastle);
-
-        */
 
 
     }

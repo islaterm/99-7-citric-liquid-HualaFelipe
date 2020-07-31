@@ -2,6 +2,14 @@ package com.github.cc3002.citricjuice.model.unit;
 
 public class BossUnit extends AbstractNonPlayerUnit {
 
+    /**
+     * Create a boss unit
+     * @param name
+     * @param hp
+     * @param atk
+     * @param def
+     * @param evd
+     */
     public BossUnit(final String name, final int hp, int atk, int def, int evd) {
         super(name, hp,atk,def,evd);
     }
