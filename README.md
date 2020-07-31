@@ -115,3 +115,7 @@ To:
 Here is a screenshot of the game.
 
 ![screenShoot](gameScreenShoot.JPG)
+
+The map has a defined route with path options.
+
+![screenShoot](gameScreenShootWithFlow.jpg)
