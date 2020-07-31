@@ -23,6 +23,16 @@ public class HomePanel extends AbstractPanel{
     public void activatedBy(final Player player) {
         applyHealTo(player);
         player.normaCheck();
+        System.out.println("NORMA CHECK");
+    }
 
+    @Override
+    public void setHome(Player player) {
+        player.setHomeHomePanel(this);
+    }
+
+    @Override
+    public String getImageUrl() {
+        return "/homePanel.gif";
     }
 }

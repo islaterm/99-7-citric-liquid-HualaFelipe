@@ -30,7 +30,13 @@ public abstract class AbstractPanel implements Panel {
   public AbstractPanel(int id) {
       this.id=id;
       this.nextPanels = new LinkedList<Panel>();
+      this.players = new ArrayList<Player>();
   }
+
+    @Override
+    public void setHome(Player player) {
+        throw new RuntimeException();
+    }
 
     public ArrayList<Player> getPlayers() {
         return players;
@@ -48,7 +54,6 @@ public abstract class AbstractPanel implements Panel {
 
     public Player removePlayer(Player player){
       players.remove(player);
-      player.setPanel(null);
       return player;
     }
 
@@ -106,5 +111,14 @@ public abstract class AbstractPanel implements Panel {
     @Override
     public int hashCode() {
         return Objects.hash(getNextPanels());
+    }
+
+    @Override
+    public boolean isEncounterPanel(){
+      return false;
+    }
+    @Override
+    public boolean isBossPanel(){
+      return false;
     }
 }

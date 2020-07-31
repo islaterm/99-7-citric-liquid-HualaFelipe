@@ -2,14 +2,14 @@ package com.github.cc3002.citricjuice.model.unit;
 
 
 import com.github.cc3002.citricjuice.model.board.HomePanel;
+import com.github.cc3002.citricjuice.model.board.NullPanel;
 import com.github.cc3002.citricjuice.model.board.Panel;
-import com.github.cc3002.citricjuice.model.gameflow.Game;
-import com.github.cc3002.citricjuice.model.unit.lifestate.Alive;
-import com.github.cc3002.citricjuice.model.unit.lifestate.ILifeState;
+import com.github.cc3002.citricliquid.controller.gameflow.*;
+import com.github.cc3002.citricliquid.controller.handlers.IHandler;
 import com.github.cc3002.citricliquid.model.NormaGoal;
 
+import java.beans.PropertyChangeSupport;
 import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * This class represents a player in the game 99.7% Citric Liquid.
@@ -24,6 +24,11 @@ public class Player extends AbstractUnit{
   private Panel panel;
   private HomePanel homePanel;
   private NormaGoal normaGoal;
+  private TurnController turnController;
+  private int playerPathChoice;
+  private int playerFightChoice;
+  private PropertyChangeSupport turnStateChangeNotification = new PropertyChangeSupport(this);
+  private PropertyChangeSupport gameStateChangeNotification = new PropertyChangeSupport(this);
 
   /**
    * Creates a new Player.
@@ -43,6 +48,23 @@ public class Player extends AbstractUnit{
     super(name,hp,atk,def, evd);
     normaLevel = 1;
     normaGoal = NormaGoal.STARS;
+    panel = new NullPanel();
+  }
+
+  public void setPlayerPathChoice(int playerPathChoice) {
+    this.playerPathChoice = playerPathChoice;
+  }
+
+  public int getPlayerPathChoice() {
+    return playerPathChoice;
+  }
+
+  public int getPlayerFightChoice() {
+    return playerFightChoice;
+  }
+
+  public void setPlayerFightChoice(int playerFightChoice) {
+    this.playerFightChoice = playerFightChoice;
   }
 
   public HomePanel getHomePanel() {
@@ -53,9 +75,15 @@ public class Player extends AbstractUnit{
     return normaGoal;
   }
 
-  public void setHomePanel(HomePanel homePanel) {
+  public void setHomePanel(Panel homePanel) {
+    homePanel.setHome(this);
+  }
+
+  public void setHomeHomePanel(HomePanel homePanel) {
     this.homePanel = homePanel;
   }
+
+
 
   public void setNormaGoal(NormaGoal normaGoal) {
     this.normaGoal = normaGoal;
@@ -67,6 +95,10 @@ public class Player extends AbstractUnit{
 
   public void setPanel(Panel panel) {
     this.panel = panel;
+  }
+
+  public void setTurnController(TurnController turnController) {
+    this.turnController = turnController;
   }
 
   public void setAtk(int atk) {
@@ -93,28 +125,13 @@ public class Player extends AbstractUnit{
   /**
    * Performs a norma clear action; the {@code norma} counter increases in 1.
    */
+
   public void normaClear() {
     normaLevel++;
     if(normaLevel==6){
-      //END GAME
+      gameStateChangeNotification.firePropertyChange("END_GAME", new InGameState(), new EndGameState(this));
     }
-
-    Scanner scanner = new Scanner(System.in);
-    NormaGoal nG;
-
-    System.out.println("Debes elegir entre \"stars\" o \"wins\"");
-    String option = scanner.nextLine();
-    while(!(option.equals("stars") || option.equals("wins"))){
-      System.out.println("Debes elegir entre \"stars\" o \"wins\"");
-      option = scanner.nextLine();
-    }
-    if(option.equals("stars")){
-      nG = NormaGoal.STARS;
-    }else{
-      nG = NormaGoal.WINS;
-    }
-
-    setNormaGoal(nG);
+    gameStateChangeNotification.firePropertyChange("NORMA_CLEAR", new InGameState(), new NormaClearState());
 
   }
 
@@ -215,92 +232,66 @@ public class Player extends AbstractUnit{
     }
   }
 
-
-  public Panel move(int number){
-    Panel panel = this.getPanel();
-    Scanner scanner = new Scanner(System.in);
-    if(number>0){
-      panel.removePlayer(this);
-      int counter = number;
-      while(counter > 0 ) {
-
-        if(panel.getNextPanels().size()>1){
-          //Elegir camino
-          int nRoad = panel.getNextPanels().size()+1;
-
-          System.out.println("Debes elegir un camino entre "+nRoad);
-
-          int road = scanner.nextInt();
-
-          while(!(road <= nRoad && road>0)){
-            System.out.println("Debes elegir un camino posible entre el 1 y el "+nRoad);
-            road = scanner.nextInt();
-          }
-
-          panel = panel.getNextPanels().get(road);
-
-
-        }else if(panel.getNextPanels().size()==1){
-          panel = panel.getNextPanels().get(0);
-        }
-
-        if(panel.getId() == this.getHomePanel().getId()){
-          System.out.println("Debes elegir entre \"normacheck\" o \"seguir\"");
-          String option = scanner.nextLine();
-          while(!(option.equals("normacheck") || option.equals("seguir"))){
-            System.out.println("Debes elegir entre \"normacheck\" o \"seguir\"");
-            option = scanner.nextLine();
-          }
-          if(option.equals("normacheck")){
-            break;
-          }
-        }
-
-        if(!panel.getPlayers().isEmpty()){
-          System.out.println("Debes elegir entre \"batalla\" o \"seguir\"");
-          String option = scanner.nextLine();
-          while(!(option.equals("batalla") || option.equals("seguir"))){
-            System.out.println("Debes elegir entre \"batalla\" o \"seguir\"");
-            option = scanner.nextLine();
-          }
-          if(option.equals("batalla")){
-            int nPlayers = panel.getPlayers().size()+1;
-
-            System.out.println("Debes elegir a quien atacar entre "+nPlayers+" opciones");
-            int battleOption = scanner.nextInt();
-
-            while(!(battleOption <= nPlayers && battleOption>0)){
-              System.out.println("Debes elegir a quien atacar entre "+nPlayers+" opciones");
-              battleOption = scanner.nextInt();
-            }
-
-            System.out.println("Debes elegir entre \"defender\" o \"evadir\"");
-            option = scanner.nextLine();
-            while(!(option.equals("defender") || option.equals("evadir"))){
-              System.out.println("Debes elegir entre \"defender\" o \"evadir\"");
-              option = scanner.nextLine();
-            }
-
-            if(option.equals("defender")){
-              this.attack(panel.getPlayers().get(battleOption),TypeCombat.DEFEND);
-            }else{
-              this.attack(panel.getPlayers().get(battleOption),TypeCombat.EVADE);
-            }
-
-            break;
-          }
-        }
-
-        counter--;
-      }
-
-      panel.addPlayer(this);
-
+  public int move(int moveNumber){
+    if(turnController.getState().isMovingPhaseActive() || turnController.getState().isWaitPathPhaseActive()){
+      return defaultMove(moveNumber);
     }
+    throw new RuntimeException();
+  }
 
-    return panel;
+  public int defaultMove(int moveNumber){
+    for(int i = 0; i<moveNumber; i++){
+      if(checkFightChoiceEvent() && !turnController.containsPassedWaitFightPanel(getPanel())){
+          return i;
+      }else if(checkHomeChoiceEvent() && !turnController.getPassedWaitHomePhase()){
+        return i;
+      }else if(checkPathChoiceEvent() && !turnController.containsPassedWaitPathPanel(getPanel())){
+          return i;
+      }else{
+        moveOne();
+      }
+    }
+    return moveNumber;
+  }
 
+  public void moveOne(){
+      Panel panel = this.getPanel();
+      this.setPanel(panel.getNextPanels().get(this.playerPathChoice));
+      this.getPanel().addPlayer(this);
+      panel.removePlayer(this);
+  }
 
+  public boolean checkPathChoiceEvent(){
+    if(this.getPanel().getNextPanels().size()>1){
+      turnStateChangeNotification.firePropertyChange("PATH_CHOICE", this.turnController.getState(), new WaitPathPhaseState());
+      return true;
+    }
+    return false;
+  }
+
+  public boolean checkFightChoiceEvent(){
+    if(this.getPanel().getPlayers().size()>1){
+      turnStateChangeNotification.firePropertyChange("FIGHT_CHOICE", this.turnController.getState(), new WaitFightPhaseState());
+      return true;
+    }
+    return false;
+  }
+
+  public boolean checkHomeChoiceEvent(){
+    if(this.getPanel().getId() == this.getHomePanel().getId() && this.getPanel().equals(this.getHomePanel())){
+      turnStateChangeNotification.firePropertyChange("HOME_CHOICE", this.turnController.getState(), new WaitHomePhaseState());
+      return true;
+    }
+    return false;
+  }
+
+  public void addMovePlayerHandler(IHandler movePlayerHandler) {
+    turnStateChangeNotification.addPropertyChangeListener(movePlayerHandler);
+
+  }
+
+  public void addChangeGameStateHandler(IHandler changeGameStateHandler) {
+    gameStateChangeNotification.addPropertyChangeListener(changeGameStateHandler);
 
   }
 

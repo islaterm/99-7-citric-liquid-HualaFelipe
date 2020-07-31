@@ -18,6 +18,7 @@ public abstract class AbstractUnit implements Unit {
     private int stars;
     private int victories;
     private int rollAtk;
+    private int rollDef;
     private ILifeState lifeState;
 
     public AbstractUnit(final String name, final int hp, int atk, int def, int evd){
@@ -61,11 +62,21 @@ public abstract class AbstractUnit implements Unit {
      * Set rollAtk a uniformly distributed random value in [1, 6]
      */
     public void rollAtk() {
-        rollAtk= random.nextInt(6) + 1;
+        rollAtk = roll();
     }
 
     public int getRollAtk() {
+
         return rollAtk;
+    }
+
+    public void rollDef() {
+        rollDef = roll();
+    }
+
+    public int getRollDef() {
+
+        return rollDef;
     }
 
     /**
@@ -156,15 +167,15 @@ public abstract class AbstractUnit implements Unit {
 
 
     public void defend(final Unit attacker){
-        int rollAtk = this.rollAtk;
-        int rollDef = this.roll();
+        int rollAtk = attacker.getRollAtk();
+        int rollDef = this.rollDef;
         int damage = Math.max(1,rollAtk+attacker.getAtk()-rollDef-this.getDef());
         this.setCurrentHP(this.getCurrentHP()-damage);
     }
 
     public void evade(final Unit attacker){
-        int rollAtk = this.rollAtk;
-        int rollEvd = this.roll();
+        int rollAtk = attacker.getRollAtk();
+        int rollEvd = this.rollDef;
         int damage;
         if(rollEvd+this.getEvd()>rollAtk+attacker.getAtk()){
             damage = 0;
@@ -256,6 +267,11 @@ public abstract class AbstractUnit implements Unit {
 
     public void goDead(){
         this.setLifeState(new Dead(this));
+    }
+
+    public void revive(){
+        this.currentHP = this.maxHP;
+        this.setLifeState(new Alive(this));
     }
 
 }

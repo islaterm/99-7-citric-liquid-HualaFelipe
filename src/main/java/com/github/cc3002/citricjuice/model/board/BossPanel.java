@@ -16,4 +16,14 @@ public class BossPanel extends AbstractPanel{
         //Battle with a Boss Unit
     }
 
+    @Override
+    public boolean isBossPanel(){
+        return true;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return "/bossPanel.gif";
+    }
+
 }

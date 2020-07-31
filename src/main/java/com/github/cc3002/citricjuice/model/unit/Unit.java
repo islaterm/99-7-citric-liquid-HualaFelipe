@@ -33,4 +33,10 @@ public interface Unit {
     void setLifeState(ILifeState lifeState);
 
 
+    void rollDef();
+    void rollAtk();
+
+    int getRollAtk();
+    int getRollDef();
+
 }

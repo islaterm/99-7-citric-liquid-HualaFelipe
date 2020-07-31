@@ -12,8 +12,20 @@ public class EncounterPanel extends AbstractPanel{
      * @param player
      */
 
+    @Override
     public void activatedBy(final Player player) {
         //Battle with a Wild Unit
     }
+
+    @Override
+    public boolean isEncounterPanel(){
+        return true;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return "/encounterPanel.gif";
+    }
+
 
 }

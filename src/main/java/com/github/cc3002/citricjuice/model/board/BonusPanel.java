@@ -26,5 +26,10 @@ public class BonusPanel extends AbstractPanel{
         applyBonusTo(player);
     }
 
+    @Override
+    public String getImageUrl() {
+        return "/bonusPanel.gif";
+    }
+
 
 }

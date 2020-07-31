@@ -40,7 +40,7 @@ class PanelTest {
     testDropPanel = new DropPanel(3);
     testEncounterPanel = new EncounterPanel(4);
     testHomePanel = new HomePanel(5);
-    testDrawPanel = new DrawPanel(7);
+    testNeutralPanel = new NeutralPanel(9);
     testSeed = new Random().nextLong();
     suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
   }
@@ -51,7 +51,6 @@ class PanelTest {
     assertEquals(new BossPanel(9), testBossPanel);
     assertEquals(new DropPanel(10), testDropPanel);
     assertEquals(new EncounterPanel(11), testEncounterPanel);
-    assertEquals(new DrawPanel(12), testDrawPanel);
     assertEquals(new HomePanel(13), testHomePanel);
     assertEquals(new NeutralPanel(14), testNeutralPanel);
     assertNotEquals(testBonusPanel, testDropPanel);
@@ -108,6 +107,7 @@ class PanelTest {
   }
 
   // region : Consistency tests
+
   @RepeatedTest(500)
   public void bonusPanelConsistencyTest() {
     int expectedStars = 0;
@@ -140,6 +140,8 @@ class PanelTest {
       suguri.normaClear();
     }
   }
+
+
 
   // endregion
 

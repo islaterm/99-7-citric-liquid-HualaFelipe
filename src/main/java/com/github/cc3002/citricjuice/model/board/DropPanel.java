@@ -25,4 +25,9 @@ public class DropPanel extends AbstractPanel{
         applyDropTo(player);
     }
 
+    @Override
+    public String getImageUrl() {
+        return "/dropPanel.gif";
+    }
+
 }
