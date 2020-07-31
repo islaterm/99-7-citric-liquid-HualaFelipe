@@ -1,18 +1,19 @@
 package com.github.cc3002.citricjuice.model.board;
 
-import com.github.cc3002.citricjuice.model.Player;
+import com.github.cc3002.citricjuice.model.unit.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.LinkedList;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author <a href="mailto:ignacio.slater@ug.uchile.cl">Ignacio Slater M.</a>.
+ * Felipe Huala
  * @version 1.0.6-rc.1
  * @since 1.0
  */
@@ -28,48 +29,63 @@ class PanelTest {
   private Panel testDropPanel;
   private Panel testEncounterPanel;
   private Panel testBossPanel;
+  private Panel testDrawPanel;
   private Player suguri;
   private long testSeed;
 
   @BeforeEach
   public void setUp() {
-    testBonusPanel = new Panel(PanelType.BONUS);
-    testBossPanel = new Panel(PanelType.BOSS);
-    testDropPanel = new Panel(PanelType.DROP);
-    testEncounterPanel = new Panel(PanelType.ENCOUNTER);
-    testHomePanel = new Panel(PanelType.HOME);
-    testNeutralPanel = new Panel(PanelType.NEUTRAL);
+    testBonusPanel = new BonusPanel(1);
+    testBossPanel = new BossPanel(2);
+    testDropPanel = new DropPanel(3);
+    testEncounterPanel = new EncounterPanel(4);
+    testHomePanel = new HomePanel(5);
+    testNeutralPanel = new NeutralPanel(9);
     testSeed = new Random().nextLong();
     suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
   }
 
   @Test
   public void constructorTest() {
-    assertEquals(PanelType.BONUS, testBonusPanel.getType());
-    assertEquals(PanelType.BOSS, testBossPanel.getType());
-    assertEquals(PanelType.DROP, testDropPanel.getType());
-    assertEquals(PanelType.ENCOUNTER, testEncounterPanel.getType());
-    assertEquals(PanelType.HOME, testHomePanel.getType());
-    assertEquals(PanelType.NEUTRAL, testNeutralPanel.getType());
+    assertEquals(new BonusPanel(8), testBonusPanel);
+    assertEquals(new BossPanel(9), testBossPanel);
+    assertEquals(new DropPanel(10), testDropPanel);
+    assertEquals(new EncounterPanel(11), testEncounterPanel);
+    assertEquals(new HomePanel(13), testHomePanel);
+    assertEquals(new NeutralPanel(14), testNeutralPanel);
+    assertNotEquals(testBonusPanel, testDropPanel);
+    assertNotEquals(testHomePanel, testDropPanel);
   }
 
   @Test
   public void nextPanelTest() {
     assertTrue(testNeutralPanel.getNextPanels().isEmpty());
-    final var expectedPanel1 = new Panel(PanelType.NEUTRAL);
-    final var expectedPanel2 = new Panel(PanelType.NEUTRAL);
+    final var expectedPanel1 = new NeutralPanel(15);
+    final var expectedPanel2 = new NeutralPanel(16);
+    final var expectedPanel3 = new NeutralPanel(17);
 
     testNeutralPanel.addNextPanel(expectedPanel1);
-    assertEquals(1, testNeutralPanel.getNextPanels().size());
+    assertEquals( testNeutralPanel.getNextPanels().size(),1);
+
+    testNeutralPanel.addNextPanel(expectedPanel2);
+    assertEquals(testNeutralPanel.getNextPanels().size(),2);
 
     testNeutralPanel.addNextPanel(expectedPanel2);
     assertEquals(2, testNeutralPanel.getNextPanels().size());
 
-    testNeutralPanel.addNextPanel(expectedPanel2);
-    assertEquals(2, testNeutralPanel.getNextPanels().size());
+    testNeutralPanel.addNextPanel(expectedPanel3);
+    assertEquals(3, testNeutralPanel.getNextPanels().size());
 
-    assertEquals(Set.of(expectedPanel1, expectedPanel2),
-                 testNeutralPanel.getNextPanels());
+    testNeutralPanel.addNextPanel(expectedPanel3);
+    assertEquals(3, testNeutralPanel.getNextPanels().size());
+
+
+    LinkedList<Panel> lista = new LinkedList<Panel>();
+    lista.add(expectedPanel1);
+    lista.add(expectedPanel2);
+    lista.add(expectedPanel3);
+
+    assertEquals(lista, testNeutralPanel.getNextPanels());
   }
 
   @Test
@@ -91,7 +107,8 @@ class PanelTest {
   }
 
   // region : Consistency tests
-  @RepeatedTest(100)
+
+  @RepeatedTest(500)
   public void bonusPanelConsistencyTest() {
     int expectedStars = 0;
     assertEquals(expectedStars, suguri.getStars());
@@ -107,7 +124,7 @@ class PanelTest {
     }
   }
 
-  @RepeatedTest(100)
+  @RepeatedTest(500)
   public void dropPanelConsistencyTest() {
     int expectedStars = 30;
     suguri.increaseStarsBy(30);
@@ -123,5 +140,10 @@ class PanelTest {
       suguri.normaClear();
     }
   }
+
+
+
   // endregion
+
+
 }
